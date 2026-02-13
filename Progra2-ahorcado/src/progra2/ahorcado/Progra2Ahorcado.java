@@ -4,6 +4,8 @@
  */
 package progra2.ahorcado;
 
+import javax.swing.*;
+
 /**
  *
  * @author ALISSONRAQUELMARTINE
@@ -14,7 +16,15 @@ public class Progra2Ahorcado {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        AdminPalabrasSecretas admin = new AdminPalabrasSecretas();
+
+        JuegoFijo juegoFijo = new JuegoFijo();
+
+        JuegoAzar juegoAzar = new JuegoAzar();
+
+        SwingUtilities.invokeLater(() -> {
+
+        });
     }
     
 }
