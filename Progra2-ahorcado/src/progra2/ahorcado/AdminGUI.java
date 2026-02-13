@@ -6,6 +6,7 @@ import java.util.List;
 
 public class AdminGUI extends JFrame {
 
+    private AdminPalabrasSecretas admin;
     private DefaultListModel<String> modelo;
     private JList<String> listaPalabras;
     private JTextField campoNueva;
@@ -13,9 +14,9 @@ public class AdminGUI extends JFrame {
     private JButton botonRegresar;
     private JFrame ventanaMenu;
 
-    public AdminGUI(JFrame menu ) {
-
+    public AdminGUI(JFrame menu, AdminPalabrasSecretas adminCompartido) {
         this.ventanaMenu = menu;
+        this.admin = adminCompartido;
 
         configurarVentana();
         inicializarComponentes();
@@ -35,8 +36,7 @@ public class AdminGUI extends JFrame {
         listaPalabras = new JList<>(modelo);
         JScrollPane panelScroll = new JScrollPane(listaPalabras);
 
-        JPanel panelInferior = new JPanel();
-        panelInferior.setLayout(new FlowLayout());
+        JPanel panelInferior = new JPanel(new FlowLayout());
 
         campoNueva = new JTextField(12);
         botonAgregar = new JButton("Añadir");
@@ -69,9 +69,10 @@ public class AdminGUI extends JFrame {
         }
 
         try {
+            admin.agregarPalabra(texto);
             campoNueva.setText("");
             cargarPalabras();
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(
                     this,
                     ex.getMessage(),
@@ -83,8 +84,10 @@ public class AdminGUI extends JFrame {
 
     private void cargarPalabras() {
         modelo.clear();
-
-
+        List<String> lista = admin.getPalabras();
+        for (String p : lista) {
+            modelo.addElement(p);
+        }
     }
 
     private void volverAlMenu() {
