@@ -18,12 +18,8 @@ public class Progra2Ahorcado {
     public static void main(String[] args) {
         AdminPalabrasSecretas admin = new AdminPalabrasSecretas();
 
-        JuegoFijo juegoFijo = new JuegoFijo();
-
-        JuegoAzar juegoAzar = new JuegoAzar();
-
         SwingUtilities.invokeLater(() -> {
-
+            new MenuPrincipal(admin).setVisible(true);
         });
     }
     

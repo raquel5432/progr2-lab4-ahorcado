@@ -14,10 +14,15 @@ public class JuegoAhorcadoGUI extends JFrame {
     private JTextArea areaDibujo;
     private JButton botonIntentar;
     private JButton botonMenu;
+    private JuegoBase juego;
+    private JFrame ventanaMenu;
 
-    public JuegoAhorcadoGUI() {
+    public JuegoAhorcadoGUI(JFrame menu, JuegoBase juego) {
+        this.ventanaMenu = menu;
+        this.juego = juego;
         configurarVentana();
         crearComponentes();
+        actualizarInterfaz();
     }
 
     private void configurarVentana() {
@@ -71,41 +76,90 @@ public class JuegoAhorcadoGUI extends JFrame {
         panelBotones.add(botonMenu);
 
         botonIntentar.addActionListener(e -> jugarTurno());
-        botonMenu.addActionListener(e -> dispose());
+        botonMenu.addActionListener(e -> {
+            if (ventanaMenu != null) {
+                ventanaMenu.setVisible(true);
+            }
+            dispose();
+        });
 
         add(panelPrincipal, BorderLayout.CENTER);
         add(panelBotones, BorderLayout.SOUTH);
     }
 
     private void limitarEntradaUnaLetra(JTextField campo) {
-
         ((AbstractDocument) campo.getDocument()).setDocumentFilter(new DocumentFilter() {
-
             @Override
             public void insertString(FilterBypass fb, int offset, String texto, AttributeSet attr)
                     throws BadLocationException {
-
                 if (texto == null) return;
                 if (fb.getDocument().getLength() >= 1) return;
-                if (!texto.matches("[a-zA-Z]")) return;
-
                 super.insertString(fb, offset, texto, attr);
             }
 
             @Override
             public void replace(FilterBypass fb, int offset, int length, String texto, AttributeSet attrs)
                     throws BadLocationException {
-
                 if (texto == null) return;
-                if (texto.length() > 1) return;
-                if (!texto.matches("[a-zA-Z]")) return;
-
+                if (fb.getDocument().getLength() - length + texto.length() > 1) return;
                 super.replace(fb, offset, length, texto, attrs);
             }
         });
     }
 
     private void jugarTurno() {
+        String texto = campoLetra.getText().trim();
+        
+        if (texto.isEmpty()) {
+            etiquetaInfo.setText("Por favor ingrese una letra");
+            return;
+        }
+        
+        char letra = texto.charAt(0);
+        campoLetra.setText("");
+        
+        try {
+            boolean acerto = juego.jugar(letra);
+            
+            if (acerto) {
+                etiquetaInfo.setText("¡Letra correcta!");
+            } else {
+                etiquetaInfo.setText("Letra incorrecta. Intentos restantes: " + (juego.getLimiteIntentos() - juego.getIntentos()));
+            }
+            
+            actualizarInterfaz();
+            
+            // Verificar si ganó
+            if (juego.Ganador()) {
+                JOptionPane.showMessageDialog(this, 
+                    "¡Felicidades! Has ganado. La palabra era: " + juego.getPalabraSecreta(),
+                    "¡Victoria!",
+                    JOptionPane.INFORMATION_MESSAGE);
+                bloquearEntrada();
+            }
+            
+        } catch (progra2.ahorcado.Exceptions.LetraRepetidaException ex) {
+            etiquetaInfo.setText("Letra repetida: " + ex.getMessage());
+        } catch (progra2.ahorcado.Exceptions.LetraInvalidaException ex) {
+            etiquetaInfo.setText("Letra inválida: " + ex.getMessage());
+        } catch (progra2.ahorcado.Exceptions.SinIntentosException ex) {
+            etiquetaInfo.setText("¡Has perdido!");
+            JOptionPane.showMessageDialog(this, 
+                ex.getMessage(),
+                "Juego Terminado",
+                JOptionPane.ERROR_MESSAGE);
+            bloquearEntrada();
+        }
+    }
+    
+    private void actualizarInterfaz() {
+        String palabraMostrar = juego.getPalabraActual().replace("", " ").trim();
+        etiquetaPalabra.setText(palabraMostrar);
+        
+        int intentosRestantes = juego.getLimiteIntentos() - juego.getIntentos();
+        etiquetaIntentos.setText("Intentos restantes: " + intentosRestantes);
+        
+        areaDibujo.setText(juego.PrintFigura(juego.getIntentos()));
     }
 
     private void bloquearEntrada() {

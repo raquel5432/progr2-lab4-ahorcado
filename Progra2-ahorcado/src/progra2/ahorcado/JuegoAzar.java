@@ -12,11 +12,12 @@ import progra2.ahorcado.Exceptions.SinIntentosException;
  *
  * @author ALISSONRAQUELMARTINE
  */
-public abstract class JuegoAzar extends JuegoBase{
+public class JuegoAzar extends JuegoBase{
     
     private final AdminPalabrasSecretas admin;
 
     public JuegoAzar(AdminPalabrasSecretas admin) {
+        super();
         this.admin = admin;
         inicializarPalabraSecreta();
     }

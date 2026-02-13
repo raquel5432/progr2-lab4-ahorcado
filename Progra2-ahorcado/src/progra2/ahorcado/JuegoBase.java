@@ -36,87 +36,63 @@ public abstract class JuegoBase implements Ahorcable {
                         |
                         |
                         |
-                   =========""";
+                   ========""";
          case 1 -> """
                     +---+
-                     |   |
-                         |
-                         |
-                         |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                        |
+                        |
+                        |
+                   ========""";
          case 2 -> """
                     +---+
-                     |   |
-                     O   |
-                         |
-                         |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                    |   |
+                        |
+                        |
+                   ========""";
          case 3 -> """
                     +---+
-                     |   |
-                     O   |
-                     |   |
-                         |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                   /|   |
+                        |
+                        |
+                   ========""";
          case 4 -> """
                     +---+
-                     |   |
-                     O   |
-                    /|   |
-                         |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                   /|\\ |
+                        |
+                        |
+                   ========""";
          case 5 -> """
                     +---+
-                     |   |
-                     O   |
-                    /|\\ |
-                         |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                   /|\\ |
+                   /    |
+                        |
+                   ========""";
          case 6 -> """
                     +---+
-                     |   |
-                     O   |
-                    /|\\ |
-                         |
-                         |
-                   =========""";
-         case 7 -> """
-                    +---+
-                     |   |
-                     O   |
-                    /|\\ |
-                    /    |
-                         |
-                   =========""";
-         case 8 -> """
-                    +---+
-                     |   |
-                     O   |
-                    /|\\ |
-                    / \\ |
-                         |
-                   =========""";
-         case 9 -> """
-                    +---+
-                     |   |
-                     O   |
-                    /|\\ |
-                    / \\  |
-                         |
-                   =========""";
+                    |   |
+                    O   |
+                   /|\\ |
+                   / \\ |
+                        |
+                   ========""";
          default -> """
-                     +---+
-                      |   |
-                      O   |
-                     /|\\ |
-                     / \\ |
-                          |
-                    =========""";
+                    +---+
+                    |   |
+                    O   |
+                   /|\\ |
+                   / \\ |
+                        |
+                   ========""";
      };     
 
  }
@@ -129,6 +105,14 @@ public abstract class JuegoBase implements Ahorcable {
         
         return PalabraSecreta;
  }
+    
+    public int getIntentos(){
+        return intentos;
+    }
+    
+    public int getLimiteIntentos(){
+        return Limites;
+    }
     
    public void Validar(char letra) throws LetraInvalidaException, LetraRepetidaException {
 
@@ -144,7 +128,8 @@ public abstract class JuegoBase implements Ahorcable {
 }
 
    
-   public boolean play(char letra)throws LetraRepetidaException, LetraInvalidaException, SinIntentosException{
+   @Override
+   public boolean jugar(char letra)throws LetraRepetidaException, LetraInvalidaException, SinIntentosException{
        
        Validar(letra);
        
@@ -171,4 +156,3 @@ public abstract class JuegoBase implements Ahorcable {
     
         
 }
-
